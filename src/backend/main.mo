@@ -151,12 +151,12 @@ actor {
     };
   };
 
-  public query ({ caller }) func getTodayLog() : async ?DailyLog {
+  // date param is the ISO date string from the frontend (e.g. "2026-03-27")
+  public query ({ caller }) func getTodayLog(date : Text) : async ?DailyLog {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view logs");
     };
-    let today = getCurrentDate();
-    let (year, month, day) = parseDate(today);
+    let (year, month, day) = parseDate(date);
     let monthKey = { year; month };
 
     switch (userLogs.get(caller)) {
@@ -177,17 +177,6 @@ actor {
     } else {
       "0" # text;
     };
-  };
-
-  func getCurrentDate() : Text {
-    let now = Time.now();
-    let daysSinceEpoch = Int.abs(now / 86_400_000_000_000);
-    let currentYear = 2000 + Int.abs(daysSinceEpoch / 365);
-    let dayOfYear = daysSinceEpoch % 365;
-    let currentMonth = 1 + Int.abs(dayOfYear / 30);
-    let currentDay = 1 + Int.abs(dayOfYear % 30);
-
-    currentYear.toNat().toText() # "-" # toTextPadded(currentMonth.toNat()) # "-" # toTextPadded(currentDay.toNat());
   };
 
   func parseDate(date : Text) : (Nat, Nat, Nat) {

@@ -32,7 +32,9 @@ export function useTodayLog() {
     queryKey: ["todayLog"],
     queryFn: async () => {
       if (!actor) return null;
-      return actor.getTodayLog();
+      const today = new Date().toISOString().split("T")[0];
+      // Pass today's date to ensure correct log is fetched
+      return (actor as any).getTodayLog(today);
     },
     enabled: !!actor && !isFetching,
   });

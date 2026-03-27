@@ -6,11 +6,9 @@ import AuthScreen from "./pages/AuthScreen";
 import MainApp from "./pages/MainApp";
 import WelcomeScreen from "./pages/WelcomeScreen";
 
-type AppView = "welcome" | "auth" | "app";
-
 export default function App() {
   const { identity, isInitializing } = useInternetIdentity();
-  const [view, setView] = useState<AppView>("welcome");
+  const [view, setView] = useState<"welcome" | "app">("welcome");
   const { data: profile, isLoading: profileLoading } = useUserProfile();
 
   if (isInitializing) {
@@ -24,9 +22,8 @@ export default function App() {
     );
   }
 
-  // If authenticated and profile loaded, show main app
+  // Authenticated + profile loaded
   if (identity && !profileLoading) {
-    // If no profile, auth screen will handle name setup, then go to app
     if (profile || view === "app") {
       return (
         <AppShell>
@@ -35,7 +32,7 @@ export default function App() {
         </AppShell>
       );
     }
-    // Identity but no profile — show auth to complete setup
+    // Identity but no profile — complete setup (arrived directly, not via welcome)
     return (
       <AppShell>
         <AuthScreen onComplete={() => setView("app")} />
@@ -44,21 +41,10 @@ export default function App() {
     );
   }
 
-  if (view === "welcome") {
-    return (
-      <AppShell>
-        <WelcomeScreen
-          onSignUp={() => setView("auth")}
-          onLogin={() => setView("auth")}
-        />
-        <Toaster position="top-center" richColors />
-      </AppShell>
-    );
-  }
-
+  // Not authenticated — show welcome with inline auth dialog
   return (
     <AppShell>
-      <AuthScreen onComplete={() => setView("app")} />
+      <WelcomeScreen onComplete={() => setView("app")} />
       <Toaster position="top-center" richColors />
     </AppShell>
   );

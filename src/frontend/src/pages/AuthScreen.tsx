@@ -33,7 +33,7 @@ export default function AuthScreen({ onComplete }: Props) {
   const showNameSetup = identity && !profileLoading && !profile;
 
   return (
-    <div className="flex flex-col min-h-screen px-6 pt-16 pb-12 bg-background">
+    <div className="flex flex-col h-screen overflow-y-auto px-6 pt-16 pb-12 bg-background">
       <motion.div
         className="flex flex-col items-center"
         initial={{ opacity: 0, y: 24 }}
@@ -53,7 +53,7 @@ export default function AuthScreen({ onComplete }: Props) {
         <p className="text-muted-foreground text-sm text-center mb-8">
           {showNameSetup
             ? "Set your display name to get started."
-            : "Sign in securely with Internet Identity."}
+            : "Sign in to continue to AquaVolt."}
         </p>
       </motion.div>
 
@@ -100,10 +100,6 @@ export default function AuthScreen({ onComplete }: Props) {
           transition={{ delay: 0.1 }}
         >
           <div className="bg-card rounded-2xl p-6 border border-border shadow-card mb-4">
-            <p className="text-sm text-muted-foreground mb-4 text-center">
-              AquaVolt uses Internet Identity for secure, passwordless
-              authentication.
-            </p>
             <Button
               className="w-full h-12 text-base font-semibold rounded-full"
               onClick={login}
@@ -116,13 +112,10 @@ export default function AuthScreen({ onComplete }: Props) {
                   in...
                 </>
               ) : (
-                "Sign In with Internet Identity"
+                "Sign In"
               )}
             </Button>
           </div>
-          <p className="text-center text-xs text-muted-foreground">
-            New? Click above to create an account or sign in.
-          </p>
         </motion.div>
       )}
     </div>

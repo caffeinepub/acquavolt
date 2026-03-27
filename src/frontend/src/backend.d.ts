@@ -31,7 +31,7 @@ export interface backendInterface {
     getCallerUserRole(): Promise<UserRole>;
     getGoals(): Promise<UsageGoals>;
     getLogsForMonth(year: bigint, month: bigint): Promise<Array<DailyLog>>;
-    getTodayLog(): Promise<DailyLog | null>;
+    getTodayLog(date: string): Promise<DailyLog | null>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
